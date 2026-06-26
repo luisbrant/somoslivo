@@ -51,6 +51,12 @@
       box-sizing: border-box;
       margin: 0;
       padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      max-width: 100%;
+      overflow-x: hidden;
     }
 
     html {
@@ -239,6 +245,10 @@
       display: flex;
       gap: 36px;
       list-style: none;
+    }
+
+    .nav-mobile-cta {
+      display: none;
     }
 
     .nav-links a {
@@ -1624,8 +1634,76 @@
         padding: 0 20px;
       }
 
+      .menu-toggle {
+        display: flex;
+        background: none;
+        border: none;
+        cursor: pointer;
+        z-index: 1001;
+      }
+
+      .menu-toggle.active span:nth-child(1) {
+        transform: rotate(45deg) translate(5px, 5px);
+      }
+      .menu-toggle.active span:nth-child(2) {
+        opacity: 0;
+      }
+      .menu-toggle.active span:nth-child(3) {
+        transform: rotate(-45deg) translate(5px, -6px);
+      }
+
       .nav-links {
+        display: flex;
+        flex-direction: column;
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 80%;
+        max-width: 300px;
+        height: 100vh;
+        background: var(--white);
+        padding: 100px 30px;
+        gap: 25px;
+        box-shadow: -10px 0 30px rgba(0,0,0,0.1);
+        transition: right 0.4s ease;
+        z-index: 1000;
+        list-style: none;
+      }
+
+      .nav-links.open {
+        right: 0;
+      }
+
+      .nav-links a {
+        font-size: 1.1rem;
+        font-weight: 500;
+        display: block;
+        padding: 10px 0;
+        text-decoration: none;
+        color: var(--gray);
+      }
+
+      .nav-cta {
         display: none;
+      }
+
+      .nav-mobile-cta {
+        display: block;
+        width: 100%;
+        margin-top: 20px;
+      }
+
+      .nav-mobile-cta .nav-cta-btn {
+        display: block;
+        width: 100%;
+        text-align: center;
+        padding: 14px 20px;
+        background: var(--black);
+        color: var(--white);
+        border-radius: 999px;
+        text-decoration: none;
+        font-size: 0.95rem;
+        font-weight: 500;
       }
 
       .lines-grid,
@@ -1674,6 +1752,7 @@
           <li><a href="#beneficios-gestor">Benefícios</a></li>
           <li><a href="#linhas">Nossas Linhas</a></li>
           <li><a href="#faq">Dúvidas</a></li>
+          <li class="nav-mobile-cta"><a href="#contato" class="nav-cta-btn">Levar para meu espaço</a></li>
         </ul>
         <a href="#contato" class="nav-cta">Levar para meu espaço</a>
         <button class="menu-toggle" id="menuToggle" aria-label="Menu">
@@ -2370,6 +2449,14 @@
     menuToggle.addEventListener('click', () => {
       menuToggle.classList.toggle('active');
       navLinks.classList.toggle('open');
+    });
+
+    // Close mobile menu when a link is clicked (UX best practice)
+    document.querySelectorAll('.nav-links a').forEach(link => {
+      link.addEventListener('click', () => {
+        menuToggle.classList.remove('active');
+        navLinks.classList.remove('open');
+      });
     });
 
     // Smooth scroll for anchor links
